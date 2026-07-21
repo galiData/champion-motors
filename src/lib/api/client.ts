@@ -1,9 +1,22 @@
+import type { RangeMonths } from "@/components/features/analytics/RangeFilter";
+import {
+  accountingAnalytics,
+  laborAnalytics,
+  marketingAnalytics,
+  salesAnalytics,
+} from "@/lib/api/fixtures/analytics";
 import { CARS } from "@/lib/api/fixtures/cars";
 import { CUSTOMERS } from "@/lib/api/fixtures/customers";
 import { EVENTS } from "@/lib/api/fixtures/events";
 import { LOCATIONS } from "@/lib/api/fixtures/locations";
 import { NEWS } from "@/lib/api/fixtures/news";
 import { STAFF } from "@/lib/api/fixtures/staff";
+import type {
+  AccountingAnalytics,
+  LaborAnalytics,
+  MarketingAnalytics,
+  SalesAnalytics,
+} from "@/types/analytics";
 import type { Car } from "@/types/car";
 import type { Customer } from "@/types/customer";
 import type { CalendarEvent } from "@/types/event";
@@ -53,5 +66,13 @@ export const api = {
   },
   events: {
     list: (): Promise<CalendarEvent[]> => resolve(EVENTS),
+  },
+  analytics: {
+    sales: (months: RangeMonths): Promise<SalesAnalytics> => resolve(salesAnalytics(months)),
+    marketing: (months: RangeMonths): Promise<MarketingAnalytics> =>
+      resolve(marketingAnalytics(months)),
+    labor: (months: RangeMonths): Promise<LaborAnalytics> => resolve(laborAnalytics(months)),
+    accounting: (months: RangeMonths): Promise<AccountingAnalytics> =>
+      resolve(accountingAnalytics(months)),
   },
 };

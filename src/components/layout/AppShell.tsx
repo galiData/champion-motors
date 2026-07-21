@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Topbar } from "@/components/layout/Topbar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 /**
  * The protected application frame: navy sidebar pinned to the reading-start
@@ -26,7 +27,16 @@ export function AppShell() {
       <div className="flex min-h-screen flex-col lg:ms-72">
         <Topbar onOpenNav={() => setIsNavOpen(true)} />
         <main className="flex-1 p-6 lg:p-8">
-          <Outlet />
+          <Suspense
+            fallback={
+              <div aria-busy="true" aria-label="טוען את הדף">
+                <Skeleton className="mb-8 h-10 w-64" />
+                <Skeleton className="h-96 w-full" />
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </div>

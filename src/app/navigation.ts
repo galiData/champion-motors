@@ -12,13 +12,31 @@ import {
   Users,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import type { ComponentType } from "react";
+import { lazy, type ComponentType } from "react";
 
 import { HubPage } from "@/pages/HubPage";
-import { AccountingReportPage } from "@/pages/analytics/AccountingReportPage";
-import { LaborReportPage } from "@/pages/analytics/LaborReportPage";
-import { MarketingReportPage } from "@/pages/analytics/MarketingReportPage";
-import { SalesReportPage } from "@/pages/analytics/SalesReportPage";
+
+/*
+ * The analytics reports are the only pages that pull in the charting library.
+ * Loading them lazily keeps roughly 400 kB of Recharts out of the initial
+ * bundle, so the hub and the directory stay fast.
+ */
+const SalesReportPage = lazy(() =>
+  import("@/pages/analytics/SalesReportPage").then((m) => ({ default: m.SalesReportPage })),
+);
+const MarketingReportPage = lazy(() =>
+  import("@/pages/analytics/MarketingReportPage").then((m) => ({
+    default: m.MarketingReportPage,
+  })),
+);
+const LaborReportPage = lazy(() =>
+  import("@/pages/analytics/LaborReportPage").then((m) => ({ default: m.LaborReportPage })),
+);
+const AccountingReportPage = lazy(() =>
+  import("@/pages/analytics/AccountingReportPage").then((m) => ({
+    default: m.AccountingReportPage,
+  })),
+);
 import { CarDetailPage } from "@/pages/directory/CarDetailPage";
 import { CarsPage } from "@/pages/directory/CarsPage";
 import { CustomerDetailPage } from "@/pages/directory/CustomerDetailPage";
