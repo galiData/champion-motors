@@ -44,16 +44,32 @@ rather than shrinking them.
 | `bg-cm-surface` | `#F5F5F5` | Section backgrounds |
 | `bg-cm-paper` | `#FAFAF9` | Page background, cards |
 
-```js
-// tailwind.config.js → theme.extend.colors
-cm: {
-  navy: "#020755",     "deep-blue": "#00335C", blue: "#1760F0",
-  sky:  "#539FFF",     red: "#FF0036",
-  ink:  "#0F0F0F",     graphite: "#505050",    slate: "#5F5F5F",
-  gray: "#707070",     line: "#CCCCCC",        mist: "#CED5DF",
-  stone:"#D9D9D8",     surface: "#F5F5F5",     paper: "#FAFAF9",
+Tailwind v4 is CSS-first — the tokens live in `src/index.css`, not a JS config:
+
+```css
+@theme {
+  --color-cm-navy: #020755;
+  --color-cm-deep-blue: #00335c;
+  --color-cm-blue: #1760f0;
+  --color-cm-sky: #539fff;
+  --color-cm-red: #ff0036;
+
+  --color-cm-ink: #0f0f0f;
+  --color-cm-graphite: #505050;
+  --color-cm-slate: #5f5f5f;
+  --color-cm-gray: #707070;
+  --color-cm-line: #cccccc;
+  --color-cm-mist: #ced5df;
+  --color-cm-stone: #d9d9d8;
+  --color-cm-surface: #f5f5f5;
+  --color-cm-paper: #fafaf9;
+
+  --font-sans: "ploni", "Assistant", "Heebo", system-ui, sans-serif;
 }
 ```
+
+shadcn's semantic variables (`--primary`, `--border`, `--ring`, …) are mapped onto
+these in the same file, so generated components inherit Champion colors.
 
 ### Usage rules
 - **Two blues, deliberately far apart.** Navy carries identity and never invites a tap.
