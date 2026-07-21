@@ -1,10 +1,6 @@
 import { Bar, BarChart, Cell, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { ChartTooltip } from "@/components/features/analytics/ChartTooltip";
-import {
-  AXIS_TICK,
-  LABEL_STYLE,
-  labelFormatter,
-} from "@/components/features/analytics/charts/chartAxes";
+import { AXIS_TICK, barEndLabel } from "@/components/features/analytics/charts/chartAxes";
 import { GRID_LINE, MARK, ORDINAL_RAMP } from "@/lib/charts/palette";
 import type { NamedValue } from "@/types/analytics";
 
@@ -54,13 +50,7 @@ export function OrdinalBarChart({ data, seriesLabel, format, ariaLabel }: Ordina
                 fill={ORDINAL_RAMP[Math.min(index, ORDINAL_RAMP.length - 1)]}
               />
             ))}
-            <LabelList
-              dataKey="value"
-              position="left"
-              offset={8}
-              formatter={labelFormatter(format)}
-              style={LABEL_STYLE}
-            />
+            <LabelList dataKey="value" content={barEndLabel(format)} />
           </Bar>
         </BarChart>
       </ResponsiveContainer>

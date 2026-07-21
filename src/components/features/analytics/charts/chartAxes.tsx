@@ -24,6 +24,63 @@ export function labelFormatter(format?: (value: number) => string) {
   };
 }
 
+interface BarLabelProps {
+  /** Recharts reports geometry as either a number or a numeric string. */
+  x?: number | string;
+  y?: number | string;
+  width?: number | string;
+  height?: number | string;
+  /** Recharts widens this to any renderable value, including `false`. */
+  value?: unknown;
+}
+
+function toNumber(value: unknown): number | null {
+  if (value == null) return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+/**
+ * Places a value label just past the growing end of a horizontal bar.
+ *
+ * `LabelList position="left"` cannot be used here: with a reversed value axis it
+ * resolves against the baseline edge, so every label lands on the same x and the
+ * whole column stacks on top of the category names. This computes the position
+ * from the bar's own geometry instead — bars grow leftward, so the data end is
+ * the rect's left edge.
+ */
+export function barEndLabel(format?: (value: number) => string) {
+  return function BarEndLabel({ x, y, width, height, value }: BarLabelProps) {
+    const left = toNumber(x);
+    const top = toNumber(y);
+    const barHeight = toNumber(height);
+    if (left == null || top == null || barHeight == null) return null;
+
+    /*
+     * On a reversed value axis Recharts reports `x` at the baseline edge and a
+     * negative `width`, so the growing end is whichever side is smaller. Taking
+     * the minimum works for both directions.
+     */
+    const dataEnd = Math.min(left, left + (toNumber(width) ?? 0));
+    const numeric = toNumber(value);
+    const text = format && numeric != null ? format(numeric) : String(value ?? "");
+
+    return (
+      <text
+        x={dataEnd - 8}
+        y={top + barHeight / 2}
+        textAnchor="end"
+        dominantBaseline="central"
+        fill={AXIS_TEXT}
+        fontSize={13}
+        direction="ltr"
+      >
+        {text}
+      </text>
+    );
+  };
+}
+
 /** Hairline, solid, one step off the surface. Never dashed. */
 export function Grid({ horizontal = true, vertical = false }) {
   return (
