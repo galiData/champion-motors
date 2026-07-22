@@ -21,6 +21,10 @@ export interface DetailLayoutProps<T> {
   notFoundTitle: string;
   notFoundDescription: string;
   children?: (item: T) => ReactNode;
+  /** Actions shown at the header's end — e.g. an edit button. */
+  headerActions?: (item: T) => ReactNode;
+  /** When provided, replaces the read-only fields grid — e.g. an inline form. */
+  body?: (item: T) => ReactNode;
 }
 
 /**
@@ -37,6 +41,8 @@ export function DetailLayout<T>({
   notFoundTitle,
   notFoundDescription,
   children,
+  headerActions,
+  body,
 }: DetailLayoutProps<T>) {
   const { data, isLoading, error, refetch } = state;
 
@@ -66,19 +72,28 @@ export function DetailLayout<T>({
 
       {!isLoading && !error && data ? (
         <>
-          <header className="mb-8 flex flex-col gap-2">
-            <h1 className="text-3xl font-bold text-cm-deep-blue">{title(data)}</h1>
-            {subtitle ? <div className="text-base text-cm-slate">{subtitle(data)}</div> : null}
+          <header className="mb-8 flex flex-wrap items-start justify-between gap-4">
+            <div className="flex flex-col gap-2">
+              <h1 className="text-3xl font-bold text-cm-deep-blue">{title(data)}</h1>
+              {subtitle ? <div className="text-base text-cm-slate">{subtitle(data)}</div> : null}
+            </div>
+            {headerActions ? (
+              <div className="flex items-center gap-3">{headerActions(data)}</div>
+            ) : null}
           </header>
 
-          <dl className="grid gap-x-8 gap-y-6 rounded-lg border border-cm-mist bg-white p-8 sm:grid-cols-2 lg:grid-cols-3">
-            {fields(data).map((field) => (
-              <div key={field.label} className="flex flex-col gap-1">
-                <dt className="text-sm font-semibold text-cm-gray">{field.label}</dt>
-                <dd className="text-base text-cm-ink">{field.value}</dd>
-              </div>
-            ))}
-          </dl>
+          {body ? (
+            <div className="rounded-lg border border-cm-mist bg-white p-8">{body(data)}</div>
+          ) : (
+            <dl className="grid gap-x-8 gap-y-6 rounded-lg border border-cm-mist bg-white p-8 sm:grid-cols-2 lg:grid-cols-3">
+              {fields(data).map((field) => (
+                <div key={field.label} className="flex flex-col gap-1">
+                  <dt className="text-sm font-semibold text-cm-gray">{field.label}</dt>
+                  <dd className="text-base text-cm-ink">{field.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
 
           {children ? <div className="mt-8">{children(data)}</div> : null}
         </>

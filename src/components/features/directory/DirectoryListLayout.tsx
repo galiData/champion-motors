@@ -21,6 +21,10 @@ export interface DirectoryListLayoutProps<T> {
   searchPlaceholder: string;
   emptyTitle: string;
   emptyDescription: string;
+  /** Actions shown at the header's end — e.g. an "add" button. */
+  headerActions?: ReactNode;
+  /** Content rendered between the header and the table — e.g. an inline form. */
+  banner?: ReactNode;
   /**
    * "page" (default) renders a full `PageHeader` (h1) — for a page's main list.
    * "section" renders a lighter h3 heading — for embedding the same table
@@ -46,6 +50,8 @@ export function DirectoryListLayout<T>({
   searchPlaceholder,
   emptyTitle,
   emptyDescription,
+  headerActions,
+  banner,
   variant = "page",
   className,
 }: DirectoryListLayoutProps<T>) {
@@ -62,13 +68,18 @@ export function DirectoryListLayout<T>({
   return (
     <div className={className}>
       {variant === "page" ? (
-        <PageHeader title={title} description={description} />
+        <PageHeader title={title} description={description} actions={headerActions} />
       ) : (
-        <div className="mb-4">
-          <h3 className="text-xl font-semibold text-cm-deep-blue">{title}</h3>
-          <p className="mt-1 text-sm text-cm-slate">{description}</p>
+        <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h3 className="text-xl font-semibold text-cm-deep-blue">{title}</h3>
+            <p className="mt-1 text-sm text-cm-slate">{description}</p>
+          </div>
+          {headerActions}
         </div>
       )}
+
+      {banner ? <div className="mb-6">{banner}</div> : null}
 
       <div className="rounded-lg border border-cm-mist bg-white">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-cm-mist p-4">
