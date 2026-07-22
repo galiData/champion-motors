@@ -5,6 +5,7 @@ import {
   FolderOpen,
   Home,
   IdCard,
+  MapPin,
   Megaphone,
   MessagesSquare,
   TrendingUp,
@@ -23,6 +24,11 @@ import { HubPage } from "@/pages/HubPage";
  */
 const SalesReportPage = lazy(() =>
   import("@/pages/analytics/SalesReportPage").then((m) => ({ default: m.SalesReportPage })),
+);
+const SalesByLocationReportPage = lazy(() =>
+  import("@/pages/analytics/SalesByLocationReportPage").then((m) => ({
+    default: m.SalesByLocationReportPage,
+  })),
 );
 const MarketingReportPage = lazy(() =>
   import("@/pages/analytics/MarketingReportPage").then((m) => ({
@@ -120,6 +126,12 @@ export const NAV_SECTIONS: NavSection[] = [
     label: "אנליטיקה",
     items: [
       { path: "/analytics/sales", label: "מכירות", icon: TrendingUp, Component: SalesReportPage },
+      {
+        path: "/analytics/sales-by-location",
+        label: "מכירות לפי סניף",
+        icon: MapPin,
+        Component: SalesByLocationReportPage,
+      },
       {
         path: "/analytics/marketing",
         label: "שיווק",
