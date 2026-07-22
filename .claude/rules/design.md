@@ -89,6 +89,25 @@ these in the same file, so generated components inherit Champion colors.
 - **Target ratio:** ~60% neutral surfaces · ~25% navy/deep-blue structure ·
   ~10% Champion Blue interaction · ≤5% everything else. Premium reads as restraint.
 
+### Gradients
+A restrained two-stop gradient is allowed **within the navy family**
+(`cm-navy` → `cm-deep-blue`) on a dark identity surface — a hero band, a statement
+panel, a card header. It reads as depth on an already-dark surface, not as decoration.
+
+```tsx
+<div className="bg-gradient-to-b from-cm-navy to-cm-deep-blue text-white">
+```
+
+- **Two stops, adjacent in the palette.** Never a third color, never a multi-hue wash.
+- **Never on `cm-blue` or `cm-red`.** A gradient wash on the action color destroys the
+  click signal, and Signal Red stays attached to a fact rather than becoming a surface.
+- **Never on text, buttons, borders or icons.** Surfaces only.
+- **Never on a light surface** — Paper and Surface stay flat. The premium signal on
+  light backgrounds is whitespace, not shading.
+- The gradient still counts as the view's one navy identity block; it does not buy a
+  second one.
+- Photography rule stands: no car floating on a gradient void.
+
 ## Typography
 
 ### Font stack
@@ -257,5 +276,6 @@ Non-negotiable — part of the Responsibility value, not a compliance afterthoug
 - ❌ No pure black for reading text
 - ❌ No recolored, stretched or flattened OEM logo
 - ❌ No OEM brand color inside Champion's own chrome
-- ❌ No gradients, no pill buttons, no serif or condensed faces
+- ❌ No pill buttons, no serif or condensed faces
+- ❌ No gradient outside the navy family, and none on text, buttons or light surfaces
 - ❌ No LTR component shipped without RTL mirroring
