@@ -21,6 +21,10 @@ export interface DirectoryListLayoutProps<T> {
   searchPlaceholder: string;
   emptyTitle: string;
   emptyDescription: string;
+  /** Actions shown at the page header's end — e.g. an "add" button. */
+  headerActions?: ReactNode;
+  /** Content rendered between the header and the table — e.g. an inline form. */
+  banner?: ReactNode;
 }
 
 /**
@@ -38,6 +42,8 @@ export function DirectoryListLayout<T>({
   searchPlaceholder,
   emptyTitle,
   emptyDescription,
+  headerActions,
+  banner,
 }: DirectoryListLayoutProps<T>) {
   const [query, setQuery] = useState("");
   const { data, isLoading, error, refetch } = state;
@@ -51,7 +57,9 @@ export function DirectoryListLayout<T>({
 
   return (
     <div>
-      <PageHeader title={title} description={description} />
+      <PageHeader title={title} description={description} actions={headerActions} />
+
+      {banner ? <div className="mb-6">{banner}</div> : null}
 
       <div className="rounded-lg border border-cm-mist bg-white">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-cm-mist p-4">

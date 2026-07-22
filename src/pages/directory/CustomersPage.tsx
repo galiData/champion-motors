@@ -1,9 +1,15 @@
+import { useState } from "react";
+import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { CustomerForm } from "@/components/features/directory/CustomerForm";
 import { DirectoryListLayout } from "@/components/features/directory/DirectoryListLayout";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
+import { useCustomerMutations } from "@/hooks/useCustomerMutations";
 import { useCustomers } from "@/hooks/useCustomers";
 import { useLocationNames } from "@/hooks/useLocationNames";
+import { useLocations } from "@/hooks/useLocations";
 import { CUSTOMER_STATUS_LABELS, type Customer, type CustomerStatus } from "@/types/customer";
 import { formatNumber } from "@/utils/formatCurrency";
 import { formatDate } from "@/utils/formatDate";
@@ -28,6 +34,9 @@ function matches(customer: Customer, query: string): boolean {
 export function CustomersPage() {
   const state = useCustomers();
   const locationNames = useLocationNames();
+  const { data: locations } = useLocations();
+  const { create, isSaving, error } = useCustomerMutations();
+  const [isAdding, setIsAdding] = useState(false);
 
   return (
     <DirectoryListLayout
@@ -39,6 +48,36 @@ export function CustomersPage() {
       searchPlaceholder="חיפוש לפי שם, עיר, טלפון או דוא״ל"
       emptyTitle="אין לקוחות להצגה"
       emptyDescription="ברגע שיתווספו לקוחות למערכת הם יופיעו כאן."
+      headerActions={
+        isAdding ? null : (
+          <Button onClick={() => setIsAdding(true)}>
+            <Plus aria-hidden="true" />
+            לקוח חדש
+          </Button>
+        )
+      }
+      banner={
+        isAdding ? (
+          <section
+            aria-label="הוספת לקוח חדש"
+            className="rounded-lg border border-cm-mist bg-white p-8"
+          >
+            <h2 className="mb-6 text-xl font-semibold text-cm-deep-blue">הוספת לקוח חדש</h2>
+            <CustomerForm
+              locations={locations ?? []}
+              isSaving={isSaving}
+              submitLabel="הוספת לקוח"
+              saveError={error?.message}
+              onCancel={() => setIsAdding(false)}
+              onSubmit={async (input) => {
+                await create(input);
+                setIsAdding(false);
+                state.refetch();
+              }}
+            />
+          </section>
+        ) : null
+      }
       renderRow={(customer) => (
         <TableRow key={customer.id}>
           <TableCell>

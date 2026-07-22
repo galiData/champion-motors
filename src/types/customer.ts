@@ -6,6 +6,9 @@ export const CUSTOMER_STATUS_LABELS: Record<CustomerStatus, string> = {
   dormant: "לא פעיל",
 };
 
+/** Ordered for status dropdowns — matches the label map above. */
+export const CUSTOMER_STATUSES: CustomerStatus[] = ["active", "lead", "dormant"];
+
 export interface Customer {
   id: string;
   name: string;
@@ -18,3 +21,6 @@ export interface Customer {
   customerSince: string;
   lastContactAt: string | null;
 }
+
+/** The editable shape of a customer — everything except the server-owned id. */
+export type CustomerInput = Omit<Customer, "id">;
