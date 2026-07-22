@@ -4,6 +4,7 @@ import {
   laborAnalytics,
   marketingAnalytics,
   salesAnalytics,
+  salesByLocationAnalytics,
 } from "@/lib/api/fixtures/analytics";
 import { CARS } from "@/lib/api/fixtures/cars";
 import { CUSTOMERS } from "@/lib/api/fixtures/customers";
@@ -16,6 +17,7 @@ import type {
   LaborAnalytics,
   MarketingAnalytics,
   SalesAnalytics,
+  SalesByLocationAnalytics,
 } from "@/types/analytics";
 import type { Car } from "@/types/car";
 import type { Customer } from "@/types/customer";
@@ -69,6 +71,8 @@ export const api = {
   },
   analytics: {
     sales: (months: RangeMonths): Promise<SalesAnalytics> => resolve(salesAnalytics(months)),
+    salesByLocation: (months: RangeMonths): Promise<SalesByLocationAnalytics> =>
+      resolve(salesByLocationAnalytics(months)),
     marketing: (months: RangeMonths): Promise<MarketingAnalytics> =>
       resolve(marketingAnalytics(months)),
     labor: (months: RangeMonths): Promise<LaborAnalytics> => resolve(laborAnalytics(months)),
