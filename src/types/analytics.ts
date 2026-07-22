@@ -30,6 +30,15 @@ export interface SalesAnalytics {
   deliveriesByMarque: NamedValue[];
 }
 
+export interface SalesByLocationAnalytics {
+  deliveries: number;
+  openOrders: number;
+  avgStockDays: number;
+  orderValueThousands: number;
+  deliveriesByLocation: NamedValue[];
+  orderValueByLocation: NamedValue[];
+}
+
 export interface MarketingAnalytics {
   leads: number;
   conversionRate: number;
