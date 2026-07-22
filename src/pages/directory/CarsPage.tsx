@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { MapPin } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { DirectoryListLayout } from "@/components/features/directory/DirectoryListLayout";
 import { Badge } from "@/components/ui/badge";
 import { TableCell, TableRow } from "@/components/ui/table";
