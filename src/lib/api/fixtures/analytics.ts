@@ -4,6 +4,7 @@ import type {
   LaborAnalytics,
   MarketingAnalytics,
   SalesAnalytics,
+  SalesByLocationAnalytics,
 } from "@/types/analytics";
 
 /**
@@ -53,6 +54,26 @@ const MARQUE_MIX: [string, number][] = [
   ["VW Commercial", 0.06],
 ];
 
+/**
+ * Deliveries mix across the sales-capable locations (kind `showroom` or
+ * `both` in src/lib/api/fixtures/locations.ts). מרכז שירות חיפה is
+ * service-only and is excluded — it doesn't sell vehicles.
+ */
+const LOCATION_DELIVERY_MIX: [string, number][] = [
+  ["אולם תצוגה תל אביב", 0.33],
+  ["מרכז שירות ראשון לציון", 0.29],
+  ["מרכז שירות באר שבע", 0.21],
+  ["אולם תצוגה ירושלים", 0.17],
+];
+
+/** Order-value mix across the same locations — deliberately not a scaled copy of the deliveries mix. */
+const LOCATION_ORDER_VALUE_MIX: [string, number][] = [
+  ["מרכז שירות ראשון לציון", 0.31],
+  ["אולם תצוגה תל אביב", 0.3],
+  ["אולם תצוגה ירושלים", 0.21],
+  ["מרכז שירות באר שבע", 0.18],
+];
+
 /** Lead origin mix, as a share of leads in the selected range. */
 const SOURCE_MIX: [string, number][] = [
   ["אתר החברה", 0.38],
@@ -86,6 +107,21 @@ export function salesAnalytics(months: RangeMonths): SalesAnalytics {
     orderValueThousands: Math.round(total * 212),
     deliveriesByMonth: labels.map((month, index) => ({ month, value: deliveries[index] })),
     deliveriesByMarque: splitByMix(total, MARQUE_MIX),
+  };
+}
+
+export function salesByLocationAnalytics(months: RangeMonths): SalesByLocationAnalytics {
+  const deliveries = lastN(DELIVERIES, months);
+  const total = sum(deliveries);
+  const orderValue = Math.round(total * 212);
+
+  return {
+    deliveries: total,
+    openOrders: Math.round(total * 0.31),
+    avgStockDays: months === 3 ? 38 : months === 6 ? 41 : 44,
+    orderValueThousands: orderValue,
+    deliveriesByLocation: splitByMix(total, LOCATION_DELIVERY_MIX),
+    orderValueByLocation: splitByMix(orderValue, LOCATION_ORDER_VALUE_MIX),
   };
 }
 
