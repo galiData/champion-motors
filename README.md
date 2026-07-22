@@ -4,6 +4,9 @@ An internal web portal for Champion Motors Israel (צ'מפיון מוטורס) e
 news and events, an operational directory (branches, customers, cars, staff), analytics
 reports, and productivity tools.
 
+<!-- demo change: verifying the push + PR workflow from the local environment -->
+
+
 The application is **Hebrew-first and right-to-left by default**. That is an
 architectural constraint, not a localisation step added at the end.
 
