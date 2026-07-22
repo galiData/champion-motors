@@ -21,16 +21,24 @@ export interface DirectoryListLayoutProps<T> {
   searchPlaceholder: string;
   emptyTitle: string;
   emptyDescription: string;
-  /** Actions shown at the page header's end — e.g. an "add" button. */
+  /** Actions shown at the header's end — e.g. an "add" button. */
   headerActions?: ReactNode;
   /** Content rendered between the header and the table — e.g. an inline form. */
   banner?: ReactNode;
+  /**
+   * "page" (default) renders a full `PageHeader` (h1) — for a page's main list.
+   * "section" renders a lighter h3 heading — for embedding the same table
+   * shell as one card inside another page, e.g. a report.
+   */
+  variant?: "page" | "section";
+  /** Extra classes on the root element, e.g. `xl:col-span-2` in a grid. */
+  className?: string;
 }
 
 /**
- * Shared shell for the four directory list pages: header, search, result count,
- * table, and the three data states. Each page supplies only its columns and row
- * rendering.
+ * Shared shell for directory-style list tables: header, search, result count,
+ * table, and the three data states. Each caller supplies only its columns and
+ * row rendering.
  */
 export function DirectoryListLayout<T>({
   title,
@@ -44,6 +52,8 @@ export function DirectoryListLayout<T>({
   emptyDescription,
   headerActions,
   banner,
+  variant = "page",
+  className,
 }: DirectoryListLayoutProps<T>) {
   const [query, setQuery] = useState("");
   const { data, isLoading, error, refetch } = state;
@@ -56,8 +66,18 @@ export function DirectoryListLayout<T>({
   }, [data, query, matches]);
 
   return (
-    <div>
-      <PageHeader title={title} description={description} actions={headerActions} />
+    <div className={className}>
+      {variant === "page" ? (
+        <PageHeader title={title} description={description} actions={headerActions} />
+      ) : (
+        <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h3 className="text-xl font-semibold text-cm-deep-blue">{title}</h3>
+            <p className="mt-1 text-sm text-cm-slate">{description}</p>
+          </div>
+          {headerActions}
+        </div>
+      )}
 
       {banner ? <div className="mb-6">{banner}</div> : null}
 

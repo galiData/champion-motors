@@ -199,9 +199,20 @@ Before delivering anything, check it against this list. When the deliverable is 
 
 ```bash
 python .claude/skills/champion-motors-brand-guideline/scripts/validate_brand.py <file> [more files...]
+python .claude/skills/champion-motors-brand-guideline/scripts/validate_brand.py --strict src/
 ```
 
-It flags off-palette hex colors, banned sales phrases in Hebrew and English, exclamation-mark abuse, contrast violations, non-brand font stacks, and missing RTL attributes in HTML. Exit code is non-zero when there are errors, so it drops into a pre-commit hook or CI cleanly.
+It flags off-palette hex colors, banned sales phrases in Hebrew and English, exclamation-mark abuse, contrast violations, non-brand font stacks, gradients outside the navy family, LTR-hardcoded spacing utilities, and missing RTL attributes in HTML. Directories are walked; comments are skipped, so a note quoting a banned pattern doesn't trip it.
+
+Exit code is 1 when there are errors and 0 otherwise, so it drops into a pre-commit hook or CI cleanly. `--strict` also fails on warnings (exit 2). Warnings are the checks that need a human look — a border token used on a decorative icon, Sky as text with no background in the same class list.
+
+When a line legitimately breaks a rule — the rules docs themselves, a validated exception — suppress it in place rather than loosening the check:
+
+```tsx
+const RAMP = ["#8DB2F8", "#5389F4"]; // brand-ignore: palette/off-brand
+```
+
+Bare `brand-ignore` suppresses every finding on the line; `brand-ignore-file` skips the file.
 
 **Manual checks the script can't make:**
 

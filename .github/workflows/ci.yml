@@ -27,6 +27,18 @@ jobs:
           node-version: 22
           cache: npm
 
+      # Node 22 bundles whichever npm patch it shipped with, and that moves
+      # under us. npm minor versions disagree about how optional and peer
+      # transitive deps are recorded, so an unpinned runner can reject a
+      # perfectly good lockfile. `packageManager` in package.json is the
+      # single source of truth — update it there, not here.
+      - name: Pin npm to the version in package.json
+        run: |
+          npm_version="$(node -p "require('./package.json').packageManager.split('@')[1]")"
+          echo "Pinning npm to $npm_version"
+          npm install -g "npm@$npm_version"
+          npm --version
+
       # `npm ci` installs exactly the committed lockfile and fails if
       # package.json and package-lock.json have drifted apart.
       - name: Install dependencies
