@@ -8,6 +8,7 @@ import {
 import { CARS } from "@/lib/api/fixtures/cars";
 import { CUSTOMERS } from "@/lib/api/fixtures/customers";
 import { EVENTS } from "@/lib/api/fixtures/events";
+import { LEAVE_REQUESTS } from "@/lib/api/fixtures/leaveRequests";
 import { LOCATIONS } from "@/lib/api/fixtures/locations";
 import { NEWS } from "@/lib/api/fixtures/news";
 import { STAFF } from "@/lib/api/fixtures/staff";
@@ -20,6 +21,7 @@ import type {
 import type { Car } from "@/types/car";
 import type { Customer } from "@/types/customer";
 import type { CalendarEvent } from "@/types/event";
+import type { LeaveRequest } from "@/types/leave";
 import type { Location } from "@/types/location";
 import type { NewsItem } from "@/types/news";
 import type { StaffMember } from "@/types/staff";
@@ -60,6 +62,9 @@ export const api = {
   staff: {
     list: (): Promise<StaffMember[]> => resolve(STAFF),
     get: (id: string): Promise<StaffMember | null> => byId(STAFF, id),
+  },
+  leaveRequests: {
+    list: (): Promise<LeaveRequest[]> => resolve(LEAVE_REQUESTS),
   },
   news: {
     list: (): Promise<NewsItem[]> => resolve(NEWS),
